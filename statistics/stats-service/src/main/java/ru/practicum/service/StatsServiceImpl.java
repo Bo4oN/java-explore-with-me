@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.model.StatsMapper;
 import ru.practicum.repository.StatsRepository;
-import statsDto.StatsDto;
-import statsDto.StatsDtoOut;
+import stats.StatsDto;
+import stats.StatsDtoOut;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

@@ -1,6 +1,6 @@
 services:
   server:
-    build: stat-service/server
+    build: ./statistics
     image: server
     container_name: server
     ports:

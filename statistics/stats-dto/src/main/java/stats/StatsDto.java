@@ -1,4 +1,4 @@
-package statsDto;
+package stats;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

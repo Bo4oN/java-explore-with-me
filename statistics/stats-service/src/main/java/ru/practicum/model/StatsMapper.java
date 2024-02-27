@@ -1,6 +1,6 @@
 package ru.practicum.model;
 
-import statsDto.StatsDto;
+import stats.StatsDto;
 
 public class StatsMapper {
     public static Stats toStats(StatsDto statsDto) {
