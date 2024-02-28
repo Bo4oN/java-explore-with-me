@@ -1,49 +1,50 @@
+version: '3.8'
 services:
-  server:
-    build: ./statistics
-    image: server
-    container_name: server
+  statistics:
+    build: ./statistics/service
+    image: statistics
+    container_name: service
     ports:
       - "9090:9090"
       - "9091:9091"
     depends_on:
       - statdb
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://statdb:5432/stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://statdb:5432/statdb
       - SPRING_DATASOURCE_USERNAME=name
       - SPRING_DATASOURCE_PASSWORD=password
 
   statdb:
     image: postgres:14-alpine
-    container_name: stats-service
+    container_name: statdb
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=name
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=stats
+      - POSTGRES_DB=statdb
 
-  main-service:
-    build: ./server
-    image: main-service
-    container_name: main-service
-    ports:
-      - "8080:8080"
-    depends_on:
-      - main-db
-      - server
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main-service
-      - SPRING_DATASOURCE_USERNAME=name
-      - SPRING_DATASOURCE_PASSWORD=password
-      - STATS_SERVER_URL=http://server:9090
-
-  main-db:
-    image: postgres:14-alpine
-    container_name: main-db
-    ports:
-      - "6542:5432"
-    environment:
-      - POSTGRES_USER=name
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=main-service
+  #server:
+  #  build: ./server
+  #  image: server
+  #  container_name: server
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    - maindb
+  #    - statistics
+  #  environment:
+  #    - SPRING_DATASOURCE_URL=jdbc:postgresql://maindb:5432/maindb
+  #    - SPRING_DATASOURCE_USERNAME=name
+  #    - SPRING_DATASOURCE_PASSWORD=password
+  #    - STATS_SERVER_URL=http://server:9090
+#
+  #maindb:
+  #  image: postgres:14-alpine
+  #  container_name: maindb
+  #  ports:
+  #    - "6542:5432"
+  #  environment:
+  #    - POSTGRES_USER=name
+  #    - POSTGRES_PASSWORD=password
+  #    - POSTGRES_DB=main-service
