@@ -32,10 +32,6 @@ public class StatsServiceImpl implements StatsService {
                 statsList = repository.getAllStatisticsUnique(start, end);
             } else {
                 statsList = repository.getAllStatistics(start, end);
-                StatsDtoOut sto = statsList.get(0);
-                log.info("!!!!!!!!! - {}", statsList.size());
-                log.info("!!!!!!!!!!!!!!!! - {}", repository.findAll());
-                log.info("!!!!!!!DATA!!!!!!! {} - {} - {}", sto.getApp(), sto.getUri(), sto.getHits());
             }
         } else if (uris.size() == 1) {
             if (isUnique) {
