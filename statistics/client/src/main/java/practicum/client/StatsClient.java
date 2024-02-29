@@ -1,4 +1,4 @@
-package statsClient;
+package practicum.client;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
