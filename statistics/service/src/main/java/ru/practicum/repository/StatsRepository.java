@@ -12,37 +12,43 @@ public interface StatsRepository extends JpaRepository<Stats, Integer> {
 
     @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
             "where st.creationTime between ?1 and ?2 " +
-            "group by st.app, st.uri")
+            "group by st.app, st.uri " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatistics(LocalDateTime start, LocalDateTime end);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
+    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
             "where st.creationTime between ?1 and ?2 " +
-            "group by st.app, st.uri, st.ip")
+            "group by st.app, st.uri, st.ip " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatisticsUnique(LocalDateTime start, LocalDateTime end);
 
     @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
             "where (st.creationTime between ?1 and ?2) " +
             "and st.uri = ?3 " +
-            "group by st.app, st.uri")
+            "group by st.app, st.uri " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatisticsByUri(LocalDateTime start, LocalDateTime end, String uri);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
+    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
             "where (st.creationTime between ?1 and ?2) " +
             "and st.uri = ?3 " +
-            "group by st.app, st.uri, st.ip")
+            "group by st.app, st.uri, st.ip " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatisticsByUriUnique(LocalDateTime start, LocalDateTime end, String uri);
 
     @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
             "where (st.creationTime between ?1 and ?2) " +
             "and (st.uri = ?3 or st.uri = ?4) " +
-            "group by st.app, st.uri")
+            "group by st.app, st.uri " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatisticsByUri(LocalDateTime start, LocalDateTime end,
                                             String firstUri, String secondUri);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
+    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
             "where (st.creationTime between ?1 and ?2) " +
             "and (st.uri = ?3 or st.uri = ?4) " +
-            "group by st.app, st.uri, st.ip")
+            "group by st.app, st.uri, st.ip " +
+            "order by COUNT(st.app) desc")
     List<StatsDtoOut> getAllStatisticsByUriUnique(LocalDateTime start, LocalDateTime end,
                                                   String firstUri, String secondUri);
 }
