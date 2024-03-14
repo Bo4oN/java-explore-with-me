@@ -9,7 +9,7 @@ import practicum.exceptions.NotFoundException;
 import practicum.model.Event;
 import practicum.model.Request;
 import practicum.model.User;
-import practicum.model.enums.Status;
+import practicum.model.enums.RequestStatus;
 import practicum.repository.EventRepository;
 import practicum.repository.RequestRepository;
 import practicum.repository.UserRepository;
@@ -56,9 +56,9 @@ public class RequestServiceImpl implements RequestService {
             throw new ConflictException("Нарушение целостности данных");
         }
         if (!event.isModeration()) {
-            request = new Request(created, event, user, Status.CONFIRMED);
+            request = new Request(created, event, user, RequestStatus.CONFIRMED);
         } else {
-            request = new Request(created, event, user, Status.PENDING);
+            request = new Request(created, event, user, RequestStatus.PENDING);
         }
         return request;
     }
@@ -69,8 +69,8 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос не найден или недоступен"));
-        if (request.getStatus() == Status.PENDING) {
-            request.setStatus(Status.CANCELED);
+        if (request.getStatus() == RequestStatus.PENDING) {
+            request.setStatus(RequestStatus.CANCELED);
         }
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }

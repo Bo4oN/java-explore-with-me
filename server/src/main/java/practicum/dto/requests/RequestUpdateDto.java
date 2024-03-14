@@ -3,7 +3,7 @@ package practicum.dto.requests;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import practicum.model.enums.Status;
+import practicum.model.enums.RequestStatus;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class RequestUpdateDto {
     private List<Long> requestsId;
-    private Status status;
+    private RequestStatus status;
 }

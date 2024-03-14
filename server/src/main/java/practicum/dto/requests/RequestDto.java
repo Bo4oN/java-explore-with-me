@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import practicum.model.enums.Status;
+import practicum.model.enums.RequestStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,5 +17,5 @@ public class RequestDto {
     private LocalDateTime createdDate;
     private long eventId;
     private long requesterId;
-    private Status status;
+    private RequestStatus status;
 }

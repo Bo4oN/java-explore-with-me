@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import practicum.model.enums.Status;
+import practicum.model.enums.RequestStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,11 +25,11 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "requester")
     private User requester;
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Type(type = "request_status")
-    private Status status;
+    private RequestStatus status;
 
-    public Request(LocalDateTime createdDate, Event event, User requester, Status status) {
+    public Request(LocalDateTime createdDate, Event event, User requester, RequestStatus status) {
         this.createdDate = createdDate;
         this.event = event;
         this.requester = requester;

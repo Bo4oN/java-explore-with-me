@@ -15,7 +15,7 @@ import practicum.exceptions.ConflictException;
 import practicum.exceptions.ForbiddenException;
 import practicum.exceptions.NotFoundException;
 import practicum.model.*;
-import practicum.model.enums.Status;
+import practicum.model.enums.RequestStatus;
 import practicum.repository.*;
 import practicum.service.stats.StatServiceImpl;
 
@@ -83,10 +83,13 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         Pageable pageable = PageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
-
-        return events.stream()
-                .map(EventMapper::toEventDtoLight)
-                .collect(Collectors.toList());
+        if (events == null) {
+            return Collections.emptyList();
+        } else {
+            return events.stream()
+                    .map(EventMapper::toEventDtoLight)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -159,7 +162,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Пользователь не является инициатором события");
         }
 
-        Status status = requestUpdateDto.getStatus();
+        RequestStatus status = requestUpdateDto.getStatus();
         List<Request> requests = requestRepository.findAllById(requestUpdateDto.getRequestsId());
 
         for (Request r : requests) {
@@ -167,10 +170,10 @@ public class EventServiceImpl implements EventService {
             requestRepository.save(r);
         }
 
-        List<RequestDto> confirmedRequests = requestRepository.findByStatus(Status.CONFIRMED).stream()
+        List<RequestDto> confirmedRequests = requestRepository.findByStatus(RequestStatus.CONFIRMED).stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
-        List<RequestDto> rejectedRequests = requestRepository.findByStatus(Status.REJECTED).stream()
+        List<RequestDto> rejectedRequests = requestRepository.findByStatus(RequestStatus.REJECTED).stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
 
@@ -180,20 +183,21 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDtoLight> getAllEvent(EventParam searchEventParams, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(searchEventParams.getFrom(), searchEventParams.getSize());
-        List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
-                searchEventParams.getCategories(),
-                searchEventParams.getPaid(),
-                searchEventParams.getRangeStart(),
-                searchEventParams.getRangeEnd(),
-                searchEventParams.getOnlyAvailable(),
-                searchEventParams.getSort(),
-                pageable);
-
-        statService.addHits(request);
-
-        return events.stream()
-                .map(EventMapper::toEventDtoLight)
-                .collect(Collectors.toList());
+        //List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
+        //        searchEventParams.getCategories(),
+        //        searchEventParams.getPaid(),
+        //        searchEventParams.getRangeStart(),
+        //        searchEventParams.getRangeEnd(),
+        //        searchEventParams.getOnlyAvailable(),
+        //        searchEventParams.getSort(),
+        //        pageable);
+//
+        //statService.addHits(request);
+//
+        //return events.stream()
+        //        .map(EventMapper::toEventDtoLight)
+        //        .collect(Collectors.toList());
+        return null;
     }
 
     @Override
