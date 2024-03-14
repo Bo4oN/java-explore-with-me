@@ -37,14 +37,14 @@ public class EventServiceImpl implements EventService {
     private final StatServiceImpl statService;
 
     @Override
-    public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamsAdmin) {
-        Pageable pageable = PageRequest.of(eventParamsAdmin.getFrom(), eventParamsAdmin.getSize());
+    public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin) {
+        Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
         List<Event> events = eventRepository.findAllEventsByAdminFilter(
-                eventParamsAdmin.getUsers(),
-                eventParamsAdmin.getStates(),
-                eventParamsAdmin.getCategories(),
-                eventParamsAdmin.getRangeStart(),
-                eventParamsAdmin.getRangeEnd(),
+                eventParamAdmin.getUsers(),
+                eventParamAdmin.getStates(),
+                eventParamAdmin.getCategories(),
+                eventParamAdmin.getRangeStart(),
+                eventParamAdmin.getRangeEnd(),
                 pageable
         );
         return events.stream()
