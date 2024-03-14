@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface EventService {
 
-    List<EventDto> getEventsFromAdmin(EventParamAdmin EventParamsAdmin);
+    List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin);
 
     EventDto updateEventFromAdmin(Long eventId, EventParamUpdateAdmin eventParamUpdateAdmin);
 
