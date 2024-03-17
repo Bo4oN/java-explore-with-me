@@ -6,7 +6,6 @@ services:
     container_name: stats-server
     ports:
       - "9090:9090"
-      - "9091:9091"
     depends_on:
       - stats-db
     environment:
@@ -32,6 +31,7 @@ services:
       - "8080:8080"
     depends_on:
       - main-db
+      - stats-server
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main-db
       - SPRING_DATASOURCE_USERNAME=name

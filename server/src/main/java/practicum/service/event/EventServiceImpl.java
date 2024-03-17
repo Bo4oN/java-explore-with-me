@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import practicum.client.StatsClient;
 import practicum.dto.events.*;
 import practicum.dto.mappers.EventMapper;
 import practicum.dto.mappers.LocationMapper;
@@ -34,22 +35,24 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
-    private final StatServiceImpl statService;
+    //private final StatServiceImpl statService;
+    private final StatsClient statClient;
 
     @Override
     public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin) {
-        Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
-        List<Event> events = eventRepository.findAllEventsByAdminFilter(
-                eventParamAdmin.getUsers(),
-                eventParamAdmin.getStates(),
-                eventParamAdmin.getCategories(),
-                eventParamAdmin.getRangeStart(),
-                eventParamAdmin.getRangeEnd(),
-                pageable
-        );
-        return events.stream()
-                .map(EventMapper::toEventDto)
-                .collect(Collectors.toList());
+       // Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
+       // List<Event> events = eventRepository.findAllEventsByAdminFilter(
+       //         eventParamAdmin.getUsers(),
+       //         eventParamAdmin.getStates(),
+       //         eventParamAdmin.getCategories(),
+       //         eventParamAdmin.getRangeStart(),
+       //         eventParamAdmin.getRangeEnd(),
+       //         pageable
+       // );
+       // return events.stream()
+       //         .map(EventMapper::toEventDto)
+       //         .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -209,8 +212,8 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Событие не опубликовано");
         }
 
-        statService.toView(Collections.emptyList());
-        statService.addHits(request);
+        //statService.toView(Collections.emptyList());
+        //statService.addHits(request);
 
         return EventMapper.toEventDto(event);
     }
