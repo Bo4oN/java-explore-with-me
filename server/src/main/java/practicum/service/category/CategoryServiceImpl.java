@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.dto.categories.CategoryDto;
-import practicum.dto.mappers.CategoryMapper;
+import practicum.dto.mappers.category.CategoryMapper;
 import practicum.exceptions.NotFoundException;
 import practicum.model.Category;
 import practicum.repository.CategoryRepository;
@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        Category category = repository.save(CategoryMapper.toCategory(categoryDto));
-        return CategoryMapper.toCategoryDto(category);
+        Category category = repository.save(categoryMapper.fromDto(categoryDto));
+        return categoryMapper.toDto(category);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = repository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена или недоступна"));
         category.setName(categoryDto.getName());
-        return CategoryMapper.toCategoryDto(repository.save(category));
+        return categoryMapper.toDto(repository.save(category));
     }
 
     @Override
@@ -46,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
         Pageable pageable = PageRequest.of(from, size);
         List<Category> categories = repository.findAll(pageable).toList();
         return categories.stream()
-                .map(CategoryMapper::toCategoryDto)
+                .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -54,6 +55,6 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto getCategoryById(long catId) {
         Category category = repository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена или недоступна"));
-        return CategoryMapper.toCategoryDto(category);
+        return categoryMapper.toDto(category);
     }
 }

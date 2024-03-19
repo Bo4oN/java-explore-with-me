@@ -2,7 +2,7 @@ package practicum.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import practicum.dto.mappers.RequestMapper;
+import practicum.dto.mappers.request.RequestMapper;
 import practicum.dto.requests.RequestDto;
 import practicum.exceptions.ConflictException;
 import practicum.exceptions.NotFoundException;
@@ -25,13 +25,14 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final RequestMapper requestMapper;
 
     @Override
     public List<RequestDto> getUsersRequests(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         return requestRepository.findByRequester(user).stream()
-                .map(RequestMapper::toRequestDto)
+                .map(requestMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно"));
 
         Request request = creatingRequest(event, user, LocalDateTime.now());
-        return RequestMapper.toRequestDto(requestRepository.save(request));
+        return requestMapper.toDto(requestRepository.save(request));
     }
 
     private Request creatingRequest(Event event, User user, LocalDateTime created) {
@@ -72,6 +73,6 @@ public class RequestServiceImpl implements RequestService {
         if (request.getStatus() == RequestStatus.PENDING) {
             request.setStatus(RequestStatus.CANCELED);
         }
-        return RequestMapper.toRequestDto(requestRepository.save(request));
+        return requestMapper.toDto(requestRepository.save(request));
     }
 }

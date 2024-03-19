@@ -1,4 +1,4 @@
-package practicum.dto.events;
+package practicum.dto.parameters;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

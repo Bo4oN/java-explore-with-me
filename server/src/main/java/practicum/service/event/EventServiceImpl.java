@@ -6,9 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.client.StatsClient;
 import practicum.dto.events.*;
-import practicum.dto.mappers.EventMapper;
-import practicum.dto.mappers.LocationMapper;
-import practicum.dto.mappers.RequestMapper;
+import practicum.dto.mappers.event.EventLightMapper;
+import practicum.dto.mappers.event.EventMapper;
+import practicum.dto.mappers.location.LocationMapper;
+import practicum.dto.mappers.request.RequestMapper;
+import practicum.dto.parameters.EventParam;
+import practicum.dto.parameters.EventParamAdmin;
+import practicum.dto.parameters.EventParamUpdateAdmin;
 import practicum.dto.requests.RequestChangingStatusDto;
 import practicum.dto.requests.RequestDto;
 import practicum.dto.requests.RequestUpdateDto;
@@ -18,7 +22,6 @@ import practicum.exceptions.NotFoundException;
 import practicum.model.*;
 import practicum.model.enums.RequestStatus;
 import practicum.repository.*;
-import practicum.service.stats.StatServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -37,22 +40,25 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     //private final StatServiceImpl statService;
     private final StatsClient statClient;
+    private final RequestMapper requestMapper;
+    private final EventMapper eventMapper;
+    private final EventLightMapper eventLightMapper;
+    private final LocationMapper locationMapper;
 
     @Override
     public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin) {
-       // Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
-       // List<Event> events = eventRepository.findAllEventsByAdminFilter(
-       //         eventParamAdmin.getUsers(),
-       //         eventParamAdmin.getStates(),
-       //         eventParamAdmin.getCategories(),
-       //         eventParamAdmin.getRangeStart(),
-       //         eventParamAdmin.getRangeEnd(),
-       //         pageable
-       // );
-       // return events.stream()
-       //         .map(EventMapper::toEventDto)
-       //         .collect(Collectors.toList());
-        return null;
+        Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
+        List<Event> events = eventRepository.findAllEventsByAdminFilter(
+                eventParamAdmin.getUsers(),
+                eventParamAdmin.getStates(),
+                eventParamAdmin.getCategories(),
+                eventParamAdmin.getRangeStart(),
+                eventParamAdmin.getRangeEnd(),
+                pageable
+        );
+        return events.stream()
+                .map(eventMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -77,7 +83,7 @@ public class EventServiceImpl implements EventService {
                 event.setPublishedDate(LocalDateTime.now());
             }
         }
-        return EventMapper.toEventDto(event);
+        return eventMapper.toDto(event);
     }
 
     @Override
@@ -90,7 +96,7 @@ public class EventServiceImpl implements EventService {
             return Collections.emptyList();
         } else {
             return events.stream()
-                    .map(EventMapper::toEventDtoLight)
+                    .map(eventLightMapper::toDto)
                     .collect(Collectors.toList());
         }
     }
@@ -101,13 +107,13 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         Category category = categoryRepository
                 .findById(eventDtoIn.getCategory()).orElseThrow(() -> new NotFoundException("Категория не найдена"));
-        Location location = LocationMapper.toLocation(eventDtoIn.getLocationDto());
-        Event event = EventMapper.toEvent(eventDtoIn, category, locationRepository.save(location));
+        Location location = locationMapper.fromDto(eventDtoIn.getLocationDto());
+        Event event = addNewEvent(eventDtoIn, category, locationRepository.save(location));
         event.setInitiator(user);
         event.setCreatedDate(LocalDateTime.now());
         event.setState("PENDING");
 
-        return EventMapper.toEventDto(event);
+        return eventMapper.toDto(event);
     }
 
     @Override
@@ -116,7 +122,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         Event event = eventRepository.findByInitiatorIdAndId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно"));
-        return EventMapper.toEventDto(event);
+        return eventMapper.toDto(event);
     }
 
     @Override
@@ -132,7 +138,7 @@ public class EventServiceImpl implements EventService {
             event.setState(eventParamUpdateAdmin.getState().toString());
         }
         updatingEvent(event, eventParamUpdateAdmin);
-        return EventMapper.toEventDto(eventRepository.save(event));
+        return eventMapper.toDto(eventRepository.save(event));
     }
 
     @Override
@@ -145,7 +151,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Пользователь не является инициатором события");
         }
         return requestRepository.findByEventId(eventId).stream()
-                .map(RequestMapper::toRequestDto)
+                .map(requestMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -174,10 +180,10 @@ public class EventServiceImpl implements EventService {
         }
 
         List<RequestDto> confirmedRequests = requestRepository.findByStatus(RequestStatus.CONFIRMED).stream()
-                .map(RequestMapper::toRequestDto)
+                .map(requestMapper::toDto)
                 .collect(Collectors.toList());
         List<RequestDto> rejectedRequests = requestRepository.findByStatus(RequestStatus.REJECTED).stream()
-                .map(RequestMapper::toRequestDto)
+                .map(requestMapper::toDto)
                 .collect(Collectors.toList());
 
         return new RequestChangingStatusDto(confirmedRequests, rejectedRequests);
@@ -186,21 +192,20 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDtoLight> getAllEvent(EventParam searchEventParams, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(searchEventParams.getFrom(), searchEventParams.getSize());
-        //List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
-        //        searchEventParams.getCategories(),
-        //        searchEventParams.getPaid(),
-        //        searchEventParams.getRangeStart(),
-        //        searchEventParams.getRangeEnd(),
-        //        searchEventParams.getOnlyAvailable(),
-        //        searchEventParams.getSort(),
-        //        pageable);
-//
+        List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
+                searchEventParams.getCategories(),
+                searchEventParams.getPaid(),
+                searchEventParams.getRangeStart(),
+                searchEventParams.getRangeEnd(),
+                searchEventParams.getOnlyAvailable(),
+                searchEventParams.getSort(),
+                pageable);
+
         //statService.addHits(request);
-//
-        //return events.stream()
-        //        .map(EventMapper::toEventDtoLight)
-        //        .collect(Collectors.toList());
-        return null;
+
+        return events.stream()
+                .map(eventLightMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -215,7 +220,20 @@ public class EventServiceImpl implements EventService {
         //statService.toView(Collections.emptyList());
         //statService.addHits(request);
 
-        return EventMapper.toEventDto(event);
+        return eventMapper.toDto(event);
+    }
+
+    private Event addNewEvent(EventDtoIn eventDtoIn, Category category, Location location) {
+        return new Event(eventDtoIn.getAnnotation(),
+                            category,
+                            eventDtoIn.getDescription(),
+                            eventDtoIn.getEventDate(),
+                            location,
+                            eventDtoIn.isPaid(),
+                            eventDtoIn.getParticipantLimit(),
+                            eventDtoIn.isRequestModeration(),
+                            eventDtoIn.getTitle()
+                    );
     }
 
     private Event updatingEvent(Event event, EventParamUpdateAdmin updateEvent) {
@@ -234,7 +252,7 @@ public class EventServiceImpl implements EventService {
             event.setEventDate(updateEvent.getEventDate());
         }
         if (updateEvent.getLocationDto() != null) {
-            event.setLocation(LocationMapper.toLocation(updateEvent.getLocationDto()));
+            event.setLocation(locationMapper.fromDto(updateEvent.getLocationDto()));
         }
         if (updateEvent.getPaid() != null) {
             event.setPaid(updateEvent.getPaid());

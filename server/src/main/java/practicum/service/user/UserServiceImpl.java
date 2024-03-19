@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import practicum.dto.mappers.UserMapper;
+import practicum.dto.mappers.user.UserMapper;
 import practicum.dto.users.UserDto;
 import practicum.exceptions.NotFoundException;
 import practicum.model.User;
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+    private final UserMapper userMapper;
 
     @Override
     public List<UserDto> getUsers(List<Long> ids, int from, int size) {
@@ -35,15 +36,15 @@ public class UserServiceImpl implements UserService {
             return Collections.emptyList();
         } else {
             return users.stream()
-                    .map(UserMapper::toUserDto)
+                    .map(userMapper::toDto)
                     .collect(Collectors.toList());
         }
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = repository.save(UserMapper.toUser(userDto));
-        return UserMapper.toUserDto(user);
+        User user = repository.save(userMapper.fromDto(userDto));
+        return userMapper.toDto(user);
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
 import practicum.dto.events.EventDtoIn;
 import practicum.dto.events.EventDtoLight;
-import practicum.dto.events.EventParamUpdateAdmin;
+import practicum.dto.parameters.EventParamUpdateAdmin;
 import practicum.dto.requests.RequestChangingStatusDto;
 import practicum.dto.requests.RequestDto;
 import practicum.dto.requests.RequestUpdateDto;

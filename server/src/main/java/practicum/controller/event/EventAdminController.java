@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
-import practicum.dto.events.EventParamAdmin;
-import practicum.dto.events.EventParamUpdateAdmin;
+import practicum.dto.parameters.EventParamAdmin;
+import practicum.dto.parameters.EventParamUpdateAdmin;
 import practicum.service.event.EventServiceImpl;
 
 import javax.validation.Valid;

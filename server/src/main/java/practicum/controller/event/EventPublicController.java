@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
 import practicum.dto.events.EventDtoLight;
-import practicum.dto.events.EventParam;
+import practicum.dto.parameters.EventParam;
 import practicum.service.event.EventServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;

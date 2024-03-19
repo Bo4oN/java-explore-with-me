@@ -1,6 +1,9 @@
 package practicum.service.event;
 
 import practicum.dto.events.*;
+import practicum.dto.parameters.EventParam;
+import practicum.dto.parameters.EventParamAdmin;
+import practicum.dto.parameters.EventParamUpdateAdmin;
 import practicum.dto.requests.RequestChangingStatusDto;
 import practicum.dto.requests.RequestDto;
 import practicum.dto.requests.RequestUpdateDto;

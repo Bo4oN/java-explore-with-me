@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.dto.compilation.CompilationDto;
 import practicum.dto.compilation.CompilationDtoIn;
-import practicum.dto.mappers.CompilationMapper;
+import practicum.dto.mappers.compilation.CompilationMapper;
 import practicum.exceptions.NotFoundException;
 import practicum.model.Compilation;
 import practicum.model.Event;
@@ -22,12 +22,13 @@ import java.util.stream.Collectors;
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
+    private final CompilationMapper compilationMapper;
 
     @Override
     public List<CompilationDto> getAllCompilations(boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         return compilationRepository.findAllByPinned(pinned, pageable).stream()
-                .map(CompilationMapper::toCompilationDto)
+                .map(compilationMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,15 +36,15 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto getCompilationById(Long comId) {
         Compilation compilation = compilationRepository.findById(comId)
                 .orElseThrow(() -> new NotFoundException("Подборка не найдена или недоступна"));
-        return CompilationMapper.toCompilationDto(compilation);
+        return compilationMapper.toDto(compilation);
     }
 
     @Override
     public CompilationDto createCompilation(CompilationDtoIn compilationDtoIn) {
-        Compilation compilation = CompilationMapper.toCompilation(compilationDtoIn);
+        Compilation compilation = new Compilation(compilationDtoIn.getPinned(), compilationDtoIn.getTitle());
         List<Event> events = eventRepository.findAllById(compilationDtoIn.getEventIds());
         compilation.setEvents(new HashSet<>(events));
-        return CompilationMapper.toCompilationDto(compilationRepository.save(compilation));
+        return compilationMapper.toDto(compilationRepository.save(compilation));
     }
 
     @Override
@@ -69,6 +70,6 @@ public class CompilationServiceImpl implements CompilationService {
             List<Event> events = eventRepository.findAllById(compilationDtoIn.getEventIds());
             compilation.setEvents(new HashSet<>(events));
         }
-        return CompilationMapper.toCompilationDto(compilation);
+        return compilationMapper.toDto(compilation);
     }
 }

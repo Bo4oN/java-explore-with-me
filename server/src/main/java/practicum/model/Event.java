@@ -28,7 +28,7 @@ public class Event {
     @JoinColumn(name = "location")
     private Location location;
     @Column(name = "paid")
-    private boolean paid;
+    private Boolean paid;
     @Column(name = "participant_limit")
     private int participantLimit;
     @Column(name = "request_moderation")

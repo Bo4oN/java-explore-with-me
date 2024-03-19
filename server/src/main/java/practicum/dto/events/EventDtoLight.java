@@ -21,13 +21,13 @@ public class EventDtoLight {
     private Boolean paid;
     private String title;
     private int confirm;
-    private UserDtoLight user;
+    private UserDtoLight initiator;
     private long views;
 
     public EventDtoLight(Long id, String annotation,
                          CategoryDto category, LocalDateTime eventDate,
                          Boolean paid, String title,
-                         int confirm, UserDtoLight user) {
+                         int confirm, UserDtoLight initiator) {
         this.id = id;
         this.annotation = annotation;
         this.category = category;
@@ -35,6 +35,6 @@ public class EventDtoLight {
         this.paid = paid;
         this.title = title;
         this.confirm = confirm;
-        this.user = user;
+        this.initiator = initiator;
     }
 }
