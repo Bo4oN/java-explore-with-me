@@ -32,7 +32,7 @@ public class Event {
     @Column(name = "participant_limit")
     private int participantLimit;
     @Column(name = "request_moderation")
-    private boolean moderation;
+    private Boolean moderation;
     @Column(name = "title")
     private String title;
     @Column(name = "confirmed_requests")

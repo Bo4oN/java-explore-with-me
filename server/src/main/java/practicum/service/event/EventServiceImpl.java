@@ -40,7 +40,6 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     //private final StatServiceImpl statService;
     private final StatsClient statClient;
-    private final RequestMapper requestMapper;
     private final EventMapper eventMapper;
     private final EventLightMapper eventLightMapper;
     private final LocationMapper locationMapper;
@@ -48,14 +47,15 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin) {
         Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
-        List<Event> events = eventRepository.findAllEventsByAdminFilter(
-                eventParamAdmin.getUsers(),
-                eventParamAdmin.getStates(),
-                eventParamAdmin.getCategories(),
-                eventParamAdmin.getRangeStart(),
-                eventParamAdmin.getRangeEnd(),
-                pageable
-        );
+        //List<Event> events = eventRepository.findAllEventsByAdminFilter(
+        //        eventParamAdmin.getUsers(),
+        //        eventParamAdmin.getStates(),
+        //        eventParamAdmin.getCategories(),
+        //        eventParamAdmin.getRangeStart(),
+        //        eventParamAdmin.getRangeEnd(),
+        //        pageable
+        //);
+        List<Event> events = eventRepository.findAll();
         return events.stream()
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
@@ -151,7 +151,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Пользователь не является инициатором события");
         }
         return requestRepository.findByEventId(eventId).stream()
-                .map(requestMapper::toDto)
+                .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
     }
 
@@ -180,10 +180,10 @@ public class EventServiceImpl implements EventService {
         }
 
         List<RequestDto> confirmedRequests = requestRepository.findByStatus(RequestStatus.CONFIRMED).stream()
-                .map(requestMapper::toDto)
+                .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
         List<RequestDto> rejectedRequests = requestRepository.findByStatus(RequestStatus.REJECTED).stream()
-                .map(requestMapper::toDto)
+                .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
 
         return new RequestChangingStatusDto(confirmedRequests, rejectedRequests);
@@ -192,16 +192,18 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDtoLight> getAllEvent(EventParam searchEventParams, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(searchEventParams.getFrom(), searchEventParams.getSize());
-        List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
-                searchEventParams.getCategories(),
-                searchEventParams.getPaid(),
-                searchEventParams.getRangeStart(),
-                searchEventParams.getRangeEnd(),
-                searchEventParams.getOnlyAvailable(),
-                searchEventParams.getSort(),
-                pageable);
+        //List<Event> events = eventRepository.findAllEventsByFilter(searchEventParams.getText(),
+        //        searchEventParams.getCategories(),
+        //        searchEventParams.getPaid(),
+        //        searchEventParams.getRangeStart(),
+        //        searchEventParams.getRangeEnd(),
+        //        searchEventParams.getOnlyAvailable(),
+        //        searchEventParams.getSort(),
+        //        pageable);
 
         //statService.addHits(request);
+
+        List<Event> events = Collections.emptyList();
 
         return events.stream()
                 .map(eventLightMapper::toDto)

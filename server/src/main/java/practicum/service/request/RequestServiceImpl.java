@@ -25,14 +25,13 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private final RequestMapper requestMapper;
 
     @Override
     public List<RequestDto> getUsersRequests(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         return requestRepository.findByRequester(user).stream()
-                .map(requestMapper::toDto)
+                .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +44,7 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно"));
 
         Request request = creatingRequest(event, user, LocalDateTime.now());
-        return requestMapper.toDto(requestRepository.save(request));
+        return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 
     private Request creatingRequest(Event event, User user, LocalDateTime created) {
@@ -56,7 +55,7 @@ public class RequestServiceImpl implements RequestService {
         if (event.getInitiator().getId() == user.getId()) {
             throw new ConflictException("Нарушение целостности данных");
         }
-        if (!event.isModeration()) {
+        if (!event.getModeration()) {
             request = new Request(created, event, user, RequestStatus.CONFIRMED);
         } else {
             request = new Request(created, event, user, RequestStatus.PENDING);
@@ -73,6 +72,6 @@ public class RequestServiceImpl implements RequestService {
         if (request.getStatus() == RequestStatus.PENDING) {
             request.setStatus(RequestStatus.CANCELED);
         }
-        return requestMapper.toDto(requestRepository.save(request));
+        return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 }

@@ -7,13 +7,15 @@ import practicum.dto.events.EventDtoLight;
 import practicum.dto.mappers.BaseMapper;
 import practicum.dto.mappers.MappingConfig;
 import practicum.dto.mappers.category.CategoryMapper;
+import practicum.dto.mappers.user.UserLightMapper;
 import practicum.model.Category;
 import practicum.model.Event;
 import practicum.model.Location;
 import practicum.model.enums.EventState;
 
 @Mapper(config = MappingConfig.class,
-uses = CategoryMapper.class)
+uses = {CategoryMapper.class, UserLightMapper.class}
+)
 public interface EventMapper extends BaseMapper<EventDto, Event> {
 
     //public static EventDtoLight toEventDtoLight(Event event) {
