@@ -1,5 +1,6 @@
 package practicum.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class StatsClient extends BaseClient {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -29,6 +31,7 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> saveStats(StatsDto statsDto) {
+        log.info("Сохранение статистики - {}", statsDto);
         return post("/hit", statsDto);
     }
 
