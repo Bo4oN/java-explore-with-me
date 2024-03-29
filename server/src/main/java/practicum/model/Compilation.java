@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity(name = "compilations")
+@Entity
+@Table(name = "compilations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

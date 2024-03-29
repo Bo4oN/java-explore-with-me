@@ -17,21 +17,21 @@ import java.time.LocalDateTime;
 public class EventDto {
     private long id;
     private String annotation;
-    private CategoryDto categoryDto;
+    private CategoryDto category;
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
-    private LocationDto locationDto;
+    private LocationDto location;
     private boolean paid;
     private int participantLimit;
-    private boolean moderation;
+    private boolean requestModeration;
     private String title;
     private int confirm;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdOn;
     private UserDtoLight initiator;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime publishedDate;
+    private LocalDateTime publishedOn;
     private EventState state;
     private long views;
 
@@ -49,18 +49,18 @@ public class EventDto {
                     EventState state) {
         this.id = id;
         this.annotation = annotation;
-        this.categoryDto = categoryDto;
+        this.category = categoryDto;
         this.description = description;
         this.eventDate = eventDate;
-        this.locationDto = locationDto;
+        this.location = locationDto;
         this.paid = paid;
         this.participantLimit = participantLimit;
-        this.moderation = moderation;
+        this.requestModeration = moderation;
         this.title = title;
         this.confirm = confirm;
-        this.createdDate = createdDate;
+        this.createdOn = createdDate;
         this.initiator = initiator;
-        this.publishedDate = publishedDate;
+        this.publishedOn = publishedDate;
         this.state = state;
     }
 }

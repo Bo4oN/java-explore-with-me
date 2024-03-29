@@ -8,6 +8,8 @@ import practicum.dto.locations.LocationDto;
 import practicum.model.enums.EventState;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -25,9 +27,10 @@ public class EventParamUpdateAdmin {
     @Valid
     private LocationDto locationDto;
     private Boolean paid;
+    @PositiveOrZero
     private Integer participantLimit;
     private Boolean requestModeration;
-    private EventState state;
+    private String stateAction;
     @Size(min = 3, max = 120)
     private String title;
 }

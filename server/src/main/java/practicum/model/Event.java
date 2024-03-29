@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "events")
+@Entity
+@Table(name = "events")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,18 +33,16 @@ public class Event {
     @Column(name = "participant_limit")
     private int participantLimit;
     @Column(name = "request_moderation")
-    private Boolean moderation;
+    private boolean requestModeration;
     @Column(name = "title")
     private String title;
-    @Column(name = "confirmed_requests")
-    private int confirm;
     @Column(name = "creation_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdOn;
     @ManyToOne
     @JoinColumn(name = "initiator")
     private User initiator;
     @Column(name = "published_date")
-    private LocalDateTime publishedDate;
+    private LocalDateTime publishedOn;
     @Column(name = "state")
     private String state;
 
@@ -59,7 +58,7 @@ public class Event {
         this.location = location;
         this.paid = paid;
         this.participantLimit = participantLimit;
-        this.moderation = moderation;
+        this.requestModeration = moderation;
         this.title = title;
     }
 }

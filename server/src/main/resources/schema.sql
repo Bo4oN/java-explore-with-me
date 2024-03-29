@@ -5,9 +5,6 @@ DROP TABLE IF EXISTS events CASCADE;
 DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS compilations CASCADE;
 DROP TABLE IF EXISTS events_in_compilation CASCADE;
-DROP TYPE IF EXISTS request_status;
-
-CREATE TYPE request_status as ENUM ('PENDING', 'CONFIRMED', 'REJECTED', 'CANCELED');
 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -28,16 +25,15 @@ CREATE TABLE IF NOT EXISTS locations (
 
 CREATE TABLE IF NOT EXISTS events (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    annotation VARCHAR(256) NOT NULL,
+    annotation VARCHAR(2000) NOT NULL,
     category BIGINT NOT NULL REFERENCES categories ON DELETE CASCADE,
-    description VARCHAR(512),
+    description VARCHAR(7000),
     event_date TIMESTAMP NOT NULL,
     location BIGINT REFERENCES locations ON DELETE CASCADE,
     paid BOOLEAN,
     participant_limit INTEGER,
     request_moderation BOOLEAN,
-    title VARCHAR(2048) NOT NULL,
-    confirmed_requests INTEGER,
+    title VARCHAR(120) NOT NULL,
     creation_date TIMESTAMP NOT NULL,
     initiator INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
     published_date TIMESTAMP,
@@ -49,7 +45,7 @@ CREATE TABLE IF NOT EXISTS requests (
     created TIMESTAMP NOT NULL,
     event INTEGER NOT NULL REFERENCES events ON DELETE CASCADE,
     requester INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
-    status request_status NOT NULL,
+    status VARCHAR(256) NOT NULL,
     UNIQUE (event, requester)
 );
 

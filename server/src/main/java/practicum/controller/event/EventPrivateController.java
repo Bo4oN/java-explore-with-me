@@ -2,6 +2,7 @@ package practicum.controller.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
 import practicum.dto.events.EventDtoIn;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping(path = "/users/{userId}/events")
+@Validated
 public class EventPrivateController {
     private final EventServiceImpl service;
 
@@ -36,7 +38,7 @@ public class EventPrivateController {
     @PostMapping
     public EventDto createEvent(@PathVariable Long userId,
                                 @RequestBody @Valid EventDtoIn eventDtoIn) {
-        log.info("Запрос на создание события, пользовательский ID = {}, события ID = {}", userId, eventDtoIn);
+        log.info("Запрос на создание события, пользовательский ID = {}, событие = {}", userId, eventDtoIn);
         return service.createEvent(userId, eventDtoIn);
     }
 

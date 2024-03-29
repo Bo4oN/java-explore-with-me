@@ -30,4 +30,10 @@ public class ErrorHandler {
         log.warn("Получен статус 409 - FORBIDDEN {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestException(final BadRequestException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 }
