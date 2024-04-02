@@ -16,12 +16,12 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "location_lat")
-    private float latitude;
+    private float lat;
     @Column(name = "location_lon")
-    private float longitude;
+    private float lon;
 
     public Location(float latitude, float longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.lat = latitude;
+        this.lon = longitude;
     }
 }

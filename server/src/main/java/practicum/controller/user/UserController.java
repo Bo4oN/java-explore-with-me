@@ -2,6 +2,7 @@ package practicum.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.users.UserDto;
 import practicum.service.user.UserServiceImpl;
@@ -27,6 +28,7 @@ public class UserController {
 
     @ResponseBody
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         log.info("Запрос на добавление пользователя - {}", userDto);
         return service.createUser(userDto);
@@ -34,6 +36,7 @@ public class UserController {
 
     @ResponseBody
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         log.info("Запрос на удаление пользователя. ID = {}", userId);
         service.deleteUser(userId);

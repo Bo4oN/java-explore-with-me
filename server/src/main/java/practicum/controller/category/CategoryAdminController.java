@@ -2,6 +2,7 @@ package practicum.controller.category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.categories.CategoryDto;
 import practicum.service.category.CategoryServiceImpl;
@@ -17,6 +18,7 @@ public class CategoryAdminController {
 
     @ResponseBody
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
         log.info("Запрос на создание категории - {}", categoryDto);
         return service.createCategory(categoryDto);
@@ -24,6 +26,7 @@ public class CategoryAdminController {
 
     @ResponseBody
     @DeleteMapping("/{catId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long catId) {
         log.info("Запрос на удаление категории. ID = {}", catId);
         service.deleteCategory(catId);

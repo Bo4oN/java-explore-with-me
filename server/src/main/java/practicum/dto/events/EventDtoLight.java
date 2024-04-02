@@ -20,7 +20,7 @@ public class EventDtoLight {
     private LocalDateTime eventDate;
     private Boolean paid;
     private String title;
-    private int confirm;
+    private int confirmedRequests;
     private UserDtoLight initiator;
     private long views;
 
@@ -34,7 +34,7 @@ public class EventDtoLight {
         this.eventDate = eventDate;
         this.paid = paid;
         this.title = title;
-        this.confirm = confirm;
+        this.confirmedRequests = confirm;
         this.initiator = initiator;
     }
 }

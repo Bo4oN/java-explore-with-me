@@ -28,7 +28,7 @@ public class EventAdminController {
     @ResponseBody
     @PatchMapping("/{eventId}")
     public EventDto updateEventById(@PathVariable Long eventId,
-                                    @RequestBody EventParamUpdateAdmin eventParamUpdateAdmin) {
+                                    @RequestBody @Valid EventParamUpdateAdmin eventParamUpdateAdmin) {
         log.info("Запрос на получение события, ID = {}, параметры - {}", eventId, eventParamUpdateAdmin);
         return service.updateEventFromAdmin(eventId, eventParamUpdateAdmin);
     }

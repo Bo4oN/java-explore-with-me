@@ -12,9 +12,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompilationDtoIn {
-    private Boolean pinned;
+    private Boolean pinned = false;
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;
-    private Set<Long> eventIds;
+    private Set<Long> events;
 }

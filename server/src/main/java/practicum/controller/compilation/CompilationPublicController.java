@@ -17,7 +17,7 @@ public class CompilationPublicController {
 
     @ResponseBody
     @GetMapping
-    public List<CompilationDto> getAllCompilations(@RequestParam boolean pinned,
+    public List<CompilationDto> getAllCompilations(@RequestParam(required = false) boolean pinned,
                                                    @RequestParam(value = "from", defaultValue = "0") int from,
                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
         log.info("Запрос на получение подборок событий. pinned = {}, from = {}, size = {}", pinned, from, size);

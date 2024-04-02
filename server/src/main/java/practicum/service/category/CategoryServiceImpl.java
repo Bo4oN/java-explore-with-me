@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.dto.categories.CategoryDto;
 import practicum.dto.mappers.category.CategoryMapper;
+import practicum.exceptions.ConflictException;
 import practicum.exceptions.NotFoundException;
 import practicum.model.Category;
 import practicum.repository.CategoryRepository;
@@ -21,6 +22,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
+        if (repository.existsByName(categoryDto.getName())) {
+            throw new ConflictException("Название категории занято");
+        }
         Category category = repository.save(categoryMapper.fromDto(categoryDto));
         return categoryMapper.toDto(category);
     }
@@ -38,6 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto changingCategory(long catId, CategoryDto categoryDto) {
         Category category = repository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена или недоступна"));
+        if (!category.getName().equals(categoryDto.getName()) && repository.existsByName(categoryDto.getName())) {
+            throw new ConflictException("Название категории занято");
+        }
         category.setName(categoryDto.getName());
         return categoryMapper.toDto(repository.save(category));
     }

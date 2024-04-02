@@ -25,6 +25,7 @@ import practicum.repository.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,18 +48,26 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin) {
         Pageable pageable = PageRequest.of(eventParamAdmin.getFrom(), eventParamAdmin.getSize());
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (eventParamAdmin.getRangeStart() != null) {
+            start = LocalDateTime.parse(eventParamAdmin.getRangeStart(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        if (eventParamAdmin.getRangeEnd() != null) {
+            end = LocalDateTime.parse(eventParamAdmin.getRangeEnd(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
         List<Event> events = eventRepository.findAllEventsByAdminFilter(
                 eventParamAdmin.getUsers(),
                 eventParamAdmin.getStates(),
                 eventParamAdmin.getCategories(),
-                eventParamAdmin.getRangeStart(),
-                eventParamAdmin.getRangeEnd(),
+                start,
+                end,
                 pageable
         );
 
         return events.stream()
                 .map(eventMapper::toDto)
-                .peek(eventDto -> eventDto.setConfirm(
+                .peek(eventDto -> eventDto.setConfirmedRequests(
                         requestRepository.countByEventIdAndStatus(eventDto.getId(), "CONFIRMED")))
                 .collect(Collectors.toList());
     }
@@ -142,8 +151,9 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Пользователь не является инициатором события");
         }
 
-        if (event.getState().equals("PUBLISHED")) {
-            throw new ConflictException("Нельзя изменить опубликованное событие");
+        if (eventParamUpdateAdmin.getEventDate() != null &&
+                eventParamUpdateAdmin.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Неверная дата события");
         }
 
         if (eventParamUpdateAdmin.getStateAction() != null) {
@@ -155,12 +165,6 @@ public class EventServiceImpl implements EventService {
                 event.setState("PENDING");
             }
         }
-
-        Event event1 = eventRepository.save(updatingEvent(event, eventParamUpdateAdmin));
-
-
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + event);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + event1);
 
         return eventMapper.toDto(event);
     }
@@ -234,7 +238,7 @@ public class EventServiceImpl implements EventService {
 
         return events.stream()
                 .map(eventLightMapper::toDto)
-                .peek(eventDto -> eventDto.setConfirm(
+                .peek(eventDto -> eventDto.setConfirmedRequests(
                         requestRepository.countByEventIdAndStatus(eventDto.getId(), "CONFIRMED")))
                 .collect(Collectors.toList());
     }
@@ -255,6 +259,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private Event addNewEvent(EventDtoIn eventDtoIn, Category category, Location location) {
+        if (eventDtoIn.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Неверная дата события");
+        }
         return new Event(eventDtoIn.getAnnotation(),
                             category,
                             eventDtoIn.getDescription(),
@@ -280,7 +287,7 @@ public class EventServiceImpl implements EventService {
             event.setDescription(updateEvent.getDescription());
         }
         if (updateEvent.getEventDate() != null) {
-            if (LocalDateTime.now().isAfter(updateEvent.getEventDate().minusHours(2))) {
+            if (updateEvent.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
                 throw new BadRequestException("Некорректная дата");
             }
                 event.setEventDate(updateEvent.getEventDate());

@@ -17,7 +17,7 @@ public class RequestMapper {
 
     public Request toRequest(RequestDto requestDto, Event event, User user) {
         return new Request(requestDto.getId(),
-                requestDto.getCreatedDate(),
+                requestDto.getCreated(),
                 event,
                 user,
                 requestDto.getStatus());

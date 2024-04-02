@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.dto.mappers.user.UserMapper;
 import practicum.dto.users.UserDto;
+import practicum.exceptions.ConflictException;
 import practicum.exceptions.NotFoundException;
 import practicum.model.User;
 import practicum.repository.UserRepository;
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        if (repository.existsByEmail(userDto.getEmail())) {
+            throw new ConflictException("Пользователь с таким email уже существует");
+        }
         User user = repository.save(userMapper.fromDto(userDto));
         return userMapper.toDto(user);
     }

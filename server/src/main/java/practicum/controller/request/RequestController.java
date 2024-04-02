@@ -2,6 +2,7 @@ package practicum.controller.request;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.requests.RequestDto;
 import practicum.service.request.RequestServiceImpl;
@@ -24,6 +25,7 @@ public class RequestController {
 
     @ResponseBody
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public RequestDto createRequest(@PathVariable Long userId,
                                     @RequestParam Long eventId) {
         log.info("Запрос на создание запроса на участие. Пользователь ID = {}, событие ID = {}", userId, eventId);

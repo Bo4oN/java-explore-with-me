@@ -26,7 +26,7 @@ public class EventDto {
     private int participantLimit;
     private boolean requestModeration;
     private String title;
-    private int confirm;
+    private int confirmedRequests;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
     private UserDtoLight initiator;
@@ -57,7 +57,7 @@ public class EventDto {
         this.participantLimit = participantLimit;
         this.requestModeration = moderation;
         this.title = title;
-        this.confirm = confirm;
+        this.confirmedRequests = confirm;
         this.createdOn = createdDate;
         this.initiator = initiator;
         this.publishedOn = publishedDate;

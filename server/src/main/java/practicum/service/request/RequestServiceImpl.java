@@ -42,6 +42,9 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно"));
 
+        if (requestRepository.existsByEventAndRequester(event, user)) {
+            throw new ConflictException("Запрос на участие уже создан");
+        }
         Request request = creatingRequest(event, user, LocalDateTime.now());
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
@@ -55,10 +58,16 @@ public class RequestServiceImpl implements RequestService {
         if (event.getInitiator().getId() == user.getId()) {
             throw new ConflictException("Нарушение целостности данных");
         }
+        if (event.getPublishedOn() == null) {
+            throw new ConflictException("Событие еще не опубликовано");
+        }
         if (!event.isRequestModeration()) {
             request = new Request(created, event, user, "CONFIRMED");
         } else {
             request = new Request(created, event, user, "PENDING");
+        }
+        if (event.getParticipantLimit() == 0) {
+            request.setStatus("CONFIRMED");
         }
         return request;
     }

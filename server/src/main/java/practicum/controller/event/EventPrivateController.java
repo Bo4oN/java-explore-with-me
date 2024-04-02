@@ -2,6 +2,7 @@ package practicum.controller.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
@@ -36,6 +37,7 @@ public class EventPrivateController {
 
     @ResponseBody
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventDto createEvent(@PathVariable Long userId,
                                 @RequestBody @Valid EventDtoIn eventDtoIn) {
         log.info("Запрос на создание события, пользовательский ID = {}, событие = {}", userId, eventDtoIn);

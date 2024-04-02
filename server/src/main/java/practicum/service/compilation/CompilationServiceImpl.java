@@ -13,8 +13,10 @@ import practicum.model.Event;
 import practicum.repository.CompilationRepository;
 import practicum.repository.EventRepository;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +44,11 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto createCompilation(CompilationDtoIn compilationDtoIn) {
         Compilation compilation = new Compilation(compilationDtoIn.getPinned(), compilationDtoIn.getTitle());
-        List<Event> events = eventRepository.findAllById(compilationDtoIn.getEventIds());
+        Set<Long> eventsIds = Collections.EMPTY_SET;
+        if (compilationDtoIn.getEvents() != null) {
+            eventsIds = compilationDtoIn.getEvents();
+        }
+        List<Event> events = eventRepository.findAllById(eventsIds);
         compilation.setEvents(new HashSet<>(events));
         return compilationMapper.toDto(compilationRepository.save(compilation));
     }
@@ -66,8 +72,8 @@ public class CompilationServiceImpl implements CompilationService {
         if (compilationDtoIn.getTitle() != null) {
             compilation.setTitle(compilationDtoIn.getTitle());
         }
-        if (compilationDtoIn.getEventIds() != null) {
-            List<Event> events = eventRepository.findAllById(compilationDtoIn.getEventIds());
+        if (compilationDtoIn.getEvents() != null) {
+            List<Event> events = eventRepository.findAllById(compilationDtoIn.getEvents());
             compilation.setEvents(new HashSet<>(events));
         }
         return compilationMapper.toDto(compilation);
