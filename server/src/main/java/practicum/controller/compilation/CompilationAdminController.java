@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.compilation.CompilationDto;
 import practicum.dto.compilation.CompilationDtoIn;
+import practicum.dto.compilation.CompilationDtoUpdate;
 import practicum.service.compilation.CompilationServiceImpl;
 
 import javax.validation.Valid;
@@ -36,8 +37,8 @@ public class CompilationAdminController {
     @ResponseBody
     @PatchMapping("/{comId}")
     public CompilationDto changingCompilation(@PathVariable Long comId,
-                                              @RequestBody @Valid CompilationDtoIn compilationDtoIn) {
-        log.info("Запрос на изменение подборки событий. ID = {}, новые данные - {}", comId, compilationDtoIn);
-        return service.changeCompilation(comId, compilationDtoIn);
+                                              @RequestBody @Valid CompilationDtoUpdate compilationDtoUpdate) {
+        log.info("Запрос на изменение подборки событий. ID = {}, новые данные - {}", comId, compilationDtoUpdate);
+        return service.changeCompilation(comId, compilationDtoUpdate);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicum.dto.mappers.user.UserMapper;
 import practicum.dto.users.UserDto;
 import practicum.exceptions.ConflictException;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final UserMapper userMapper;
@@ -26,9 +28,6 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(from, size);
         List<User> users;
         if (ids != null) {
-            for (Long id : ids) {
-                repository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
-            }
             users = repository.findByIdIn(ids, pageable);
         } else {
             users = repository.findAll(pageable).toList();
@@ -43,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         if (repository.existsByEmail(userDto.getEmail())) {
             throw new ConflictException("Пользователь с таким email уже существует");
@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(long userId) {
         repository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
         repository.deleteById(userId);

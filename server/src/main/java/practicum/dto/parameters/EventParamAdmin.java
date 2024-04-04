@@ -1,7 +1,6 @@
 package practicum.dto.parameters;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

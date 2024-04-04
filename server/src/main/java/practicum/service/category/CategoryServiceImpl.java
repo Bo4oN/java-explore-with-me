@@ -10,6 +10,7 @@ import practicum.exceptions.ConflictException;
 import practicum.exceptions.NotFoundException;
 import practicum.model.Category;
 import practicum.repository.CategoryRepository;
+import practicum.repository.EventRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+    private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
 
     @Override
@@ -31,6 +33,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(long catId) {
+        if (eventRepository.existsByCategoryId(catId)) {
+            throw new ConflictException("Категория используется в событии");
+        }
         if (repository.existsById(catId)) {
             repository.deleteById(catId);
         } else {

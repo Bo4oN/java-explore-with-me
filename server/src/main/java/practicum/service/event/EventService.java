@@ -1,8 +1,9 @@
 package practicum.service.event;
 
-import practicum.dto.events.*;
+import practicum.dto.events.EventDto;
+import practicum.dto.events.EventDtoIn;
+import practicum.dto.events.EventDtoLight;
 import practicum.dto.parameters.EventParam;
-import practicum.dto.parameters.EventParamAdmin;
 import practicum.dto.parameters.EventParamUpdateAdmin;
 import practicum.dto.requests.RequestChangingStatusDto;
 import practicum.dto.requests.RequestDto;
@@ -13,7 +14,8 @@ import java.util.List;
 
 public interface EventService {
 
-    List<EventDto> getEventsFromAdmin(EventParamAdmin eventParamAdmin);
+    List<EventDto> getEventsFromAdmin(List<Long> users, List<String> states, List<Long> categories,
+                                      String start, String end, int from, int size);
 
     EventDto updateEventFromAdmin(Long eventId, EventParamUpdateAdmin eventParamUpdateAdmin);
 

@@ -2,6 +2,7 @@ package practicum.service.compilation;
 
 import practicum.dto.compilation.CompilationDto;
 import practicum.dto.compilation.CompilationDtoIn;
+import practicum.dto.compilation.CompilationDtoUpdate;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface CompilationService {
 
     void deleteCompilation(Long comId);
 
-    CompilationDto changeCompilation(Long comId, CompilationDtoIn compilationDtoIn);
+    CompilationDto changeCompilation(Long comId, CompilationDtoUpdate compilationDtoUpdate);
 }

@@ -5,13 +5,10 @@ import practicum.dto.compilation.CompilationDto;
 import practicum.dto.mappers.BaseMapper;
 import practicum.dto.mappers.MappingConfig;
 import practicum.dto.mappers.event.EventLightMapper;
-import practicum.dto.mappers.event.EventMapper;
 import practicum.model.Compilation;
 
-import java.util.stream.Collectors;
-
 @Mapper(config = MappingConfig.class,
-uses = EventLightMapper.class)
+        uses = EventLightMapper.class)
 public interface CompilationMapper extends BaseMapper<CompilationDto, Compilation> {
 
     //public static CompilationDto toCompilationDto(Compilation compilation) {

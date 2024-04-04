@@ -1,10 +1,24 @@
 package stats;
 
-public interface StatsDtoOut {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    String getApp();
+@Data
+@NoArgsConstructor
+public class StatsDtoOut {
+    private String app;
+    private String uri;
+    private int hits;
 
-    String getUri();
+    public StatsDtoOut(String app, String uri, int hits) {
+        this.app = app;
+        this.uri = uri;
+        this.hits = hits;
+    }
 
-    Integer getHits();
+    //String getApp();
+//
+    //String getUri();
+//
+    //Integer getHits();
 }

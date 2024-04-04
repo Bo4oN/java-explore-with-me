@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practicum.dto.compilation.CompilationDto;
 import practicum.dto.compilation.CompilationDtoIn;
+import practicum.dto.compilation.CompilationDtoUpdate;
 import practicum.dto.mappers.compilation.CompilationMapper;
 import practicum.exceptions.NotFoundException;
 import practicum.model.Compilation;
@@ -63,19 +64,20 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto changeCompilation(Long comId, CompilationDtoIn compilationDtoIn) {
+    public CompilationDto changeCompilation(Long comId, CompilationDtoUpdate compilationDtoUpdate) {
         Compilation compilation = compilationRepository.findById(comId)
                 .orElseThrow(() -> new NotFoundException("Подборка не найдена или недоступна"));
-        if (compilationDtoIn.getPinned() != null) {
-            compilation.setPinned(compilationDtoIn.getPinned());
+        if (compilationDtoUpdate.getPinned() != null) {
+            compilation.setPinned(compilationDtoUpdate.getPinned());
         }
-        if (compilationDtoIn.getTitle() != null) {
-            compilation.setTitle(compilationDtoIn.getTitle());
+        if (compilationDtoUpdate.getTitle() != null) {
+            compilation.setTitle(compilationDtoUpdate.getTitle());
         }
-        if (compilationDtoIn.getEvents() != null) {
-            List<Event> events = eventRepository.findAllById(compilationDtoIn.getEvents());
+        if (compilationDtoUpdate.getEvents() != null) {
+            List<Event> events = eventRepository.findAllById(compilationDtoUpdate.getEvents());
             compilation.setEvents(new HashSet<>(events));
         }
+        compilationRepository.save(compilation);
         return compilationMapper.toDto(compilation);
     }
 }

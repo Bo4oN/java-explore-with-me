@@ -9,10 +9,10 @@ import practicum.model.Category;
 @Mapper(config = MappingConfig.class)
 public interface CategoryMapper extends BaseMapper<CategoryDto, Category> {
 }
-   //public static Category toCategory(CategoryDto categoryDto) {
-   //    return new Category(categoryDto.getId(), categoryDto.getName());
-   //}
+//public static Category toCategory(CategoryDto categoryDto) {
+//    return new Category(categoryDto.getId(), categoryDto.getName());
+//}
 
-   //public static CategoryDto toCategoryDto(Category category) {
-   //    return new CategoryDto(category.getId(), category.getName());
-   //}
+//public static CategoryDto toCategoryDto(Category category) {
+//    return new CategoryDto(category.getId(), category.getName());
+//}
