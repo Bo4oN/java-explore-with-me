@@ -1,8 +1,8 @@
 package practicum.dto.mappers;
 
-public interface BaseMapper<Dto, Entity> {
+public interface BaseMapper<T, S> {
 
-    Dto toDto(Entity entity);
+    T toDto(S entity);
 
-    Entity fromDto(Dto dto);
+    S fromDto(T dto);
 }
