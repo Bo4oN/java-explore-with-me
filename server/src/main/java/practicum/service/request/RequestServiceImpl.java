@@ -2,6 +2,7 @@ package practicum.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicum.dto.mappers.request.RequestMapper;
 import practicum.dto.requests.RequestDto;
 import practicum.exceptions.ConflictException;
@@ -35,6 +36,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public RequestDto sendRequest(long userId, long eventId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));
@@ -73,6 +75,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public RequestDto cancelledRequest(long userId, long requestId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден или недоступен"));

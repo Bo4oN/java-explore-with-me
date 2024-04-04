@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicum.dto.categories.CategoryDto;
 import practicum.dto.mappers.category.CategoryMapper;
 import practicum.exceptions.ConflictException;
@@ -23,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @Transactional
     public CategoryDto createCategory(CategoryDto categoryDto) {
         if (repository.existsByName(categoryDto.getName())) {
             throw new ConflictException("Название категории занято");
@@ -32,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(long catId) {
         if (eventRepository.existsByCategoryId(catId)) {
             throw new ConflictException("Категория используется в событии");
@@ -44,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto changingCategory(long catId, CategoryDto categoryDto) {
         Category category = repository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена или недоступна"));

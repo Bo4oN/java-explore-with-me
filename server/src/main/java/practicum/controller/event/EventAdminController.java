@@ -2,6 +2,7 @@ package practicum.controller.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicum.dto.events.EventDto;
 import practicum.dto.parameters.EventParamUpdateAdmin;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping(path = "/admin/events")
+@Validated
 public class EventAdminController {
     private final EventServiceImpl service;
 

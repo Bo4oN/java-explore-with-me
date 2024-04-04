@@ -15,6 +15,8 @@ import practicum.dto.requests.RequestUpdateDto;
 import practicum.service.event.EventServiceImpl;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -28,8 +30,8 @@ public class EventPrivateController {
     @ResponseBody
     @GetMapping
     public List<EventDtoLight> getEventsCurrentUser(@PathVariable Long userId,
-                                                    @RequestParam(value = "from", defaultValue = "0") int from,
-                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
+                                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero int from,
+                                                    @RequestParam(value = "size", defaultValue = "10") @Positive int size) {
         log.info("Запрос на получение всех событий добавленных пользователем, ID = {}, from = {}, size = {}",
                 userId, from, size);
         return service.getEventsCurrentUser(userId, from, size);
