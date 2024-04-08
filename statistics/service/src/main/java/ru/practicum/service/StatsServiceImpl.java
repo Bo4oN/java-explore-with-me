@@ -9,7 +9,6 @@ import ru.practicum.repository.StatsRepository;
 import stats.StatsDto;
 import stats.StatsDtoOut;
 
-import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
