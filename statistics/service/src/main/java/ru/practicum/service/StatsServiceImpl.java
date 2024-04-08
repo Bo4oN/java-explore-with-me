@@ -3,11 +3,13 @@ package ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.exceptions.IncorrectDataException;
 import ru.practicum.model.StatsMapper;
 import ru.practicum.repository.StatsRepository;
 import stats.StatsDto;
 import stats.StatsDtoOut;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,9 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsDtoOut> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, boolean isUnique) {
+        if (start.isAfter(end) || start.equals(end)) {
+            throw new IncorrectDataException("Некорректные даты");
+        }
         List<StatsDtoOut> statsList = Collections.emptyList();
         if (uris == null) {
             if (isUnique) {
