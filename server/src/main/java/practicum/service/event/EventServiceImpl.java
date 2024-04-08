@@ -1,11 +1,9 @@
 package practicum.service.event;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicum.client.StatsClient;
@@ -39,6 +37,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
@@ -390,18 +389,19 @@ public class EventServiceImpl implements EventService {
                 .orElse(null);
         Map<Long, Integer> viewStatsMap = new HashMap<>();
 
+        List<StatsDtoOut> viewStatsList;
+
         if (earliestDate != null) {
-            ResponseEntity<Object> response = statsClient.getStats(earliestDate, LocalDateTime.now(),
+            viewStatsList = statsClient.getStats(earliestDate, LocalDateTime.now(),
                     uris, true);
 
-            List<StatsDtoOut> viewStatsList = objectMapper.convertValue(response.getBody(), new TypeReference<>() {
-            });
-
-            viewStatsMap = viewStatsList.stream()
-                    .filter(statsDtoOut -> statsDtoOut.getUri().startsWith("/events/"))
-                    .collect(Collectors.toMap(
-                            statsDto -> Long.parseLong(statsDto.getUri().substring("/events/".length())),
-                            StatsDtoOut::getHits));
+            if (viewStatsList != null) {
+                viewStatsMap = viewStatsList.stream()
+                        .filter(statsDtoOut -> statsDtoOut.getUri().startsWith("/events/"))
+                        .collect(Collectors.toMap(
+                                statsDto -> Long.parseLong(statsDto.getUri().substring("/events/".length())),
+                                StatsDtoOut::getHits));
+            }
         }
         return viewStatsMap;
     }

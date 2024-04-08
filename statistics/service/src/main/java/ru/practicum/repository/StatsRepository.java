@@ -10,45 +10,51 @@ import java.util.List;
 
 public interface StatsRepository extends JpaRepository<Stats, Integer> {
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
-            "where st.creationTime between ?1 and ?2 " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(st.app) as hits) " +
+            "from Stats as st " +
+            "where creationTime between :start and :end " +
             "group by st.app, st.uri " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatistics(LocalDateTime start, LocalDateTime end);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
-            "where st.creationTime between ?1 and ?2 " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(st.app) as hits) " +
+            "from Stats as st " +
+            "where creationTime between :start and :end " +
             "group by st.app, st.uri, st.ip " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatisticsUnique(LocalDateTime start, LocalDateTime end);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
-            "where (st.creationTime between ?1 and ?2) " +
-            "and st.uri = ?3 " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(st.app) as hits) " +
+            "from Stats as st " +
+            "where (creationTime between :start and :end) " +
+            "and st.uri = :uri " +
             "group by st.app, st.uri " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatisticsByUri(LocalDateTime start, LocalDateTime end, String uri);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
-            "where (st.creationTime between ?1 and ?2) " +
-            "and st.uri = ?3 " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits) " +
+            "from Stats as st " +
+            "where (creationTime between :start and :end) " +
+            "and st.uri = :uri " +
             "group by st.app, st.uri, st.ip " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatisticsByUriUnique(LocalDateTime start, LocalDateTime end, String uri);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(st.app) as hits from Stats as st " +
-            "where (st.creationTime between ?1 and ?2) " +
-            "and (st.uri = ?3 or st.uri = ?4) " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(st.app) as hits) " +
+            "from Stats as st " +
+            "where (creationTime between :start and :end) " +
+            "and (st.uri = :firstUri or st.uri = :secondUri) " +
             "group by st.app, st.uri " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatisticsByUri(LocalDateTime start, LocalDateTime end,
                                             String firstUri, String secondUri);
 
-    @Query("select st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits from Stats as st " +
-            "where (st.creationTime between ?1 and ?2) " +
-            "and (st.uri = ?3 or st.uri = ?4) " +
+    @Query("select new stats.StatsDtoOut(st.app as app, st.uri as uri, COUNT(distinct st.ip) as hits) " +
+            "from Stats as st " +
+            "where (creationTime between :start and :end) " +
+            "and (st.uri = :firstUri or st.uri = :secondUri) " +
             "group by st.app, st.uri, st.ip " +
-            "order by COUNT(st.app) desc")
+            "order by hits desc")
     List<StatsDtoOut> getAllStatisticsByUriUnique(LocalDateTime start, LocalDateTime end,
                                                   String firstUri, String secondUri);
 }

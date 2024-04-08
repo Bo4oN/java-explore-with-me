@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicum.dto.compilation.CompilationDto;
 import practicum.dto.compilation.CompilationDtoIn;
 import practicum.dto.compilation.CompilationDtoUpdate;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
@@ -43,6 +45,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto createCompilation(CompilationDtoIn compilationDtoIn) {
         Compilation compilation = new Compilation(compilationDtoIn.getPinned(), compilationDtoIn.getTitle());
         Set<Long> eventsIds = Collections.EMPTY_SET;
@@ -55,6 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilation(Long comId) {
         if (compilationRepository.existsById(comId)) {
             compilationRepository.deleteById(comId);
@@ -64,6 +68,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto changeCompilation(Long comId, CompilationDtoUpdate compilationDtoUpdate) {
         Compilation compilation = compilationRepository.findById(comId)
                 .orElseThrow(() -> new NotFoundException("Подборка не найдена или недоступна"));

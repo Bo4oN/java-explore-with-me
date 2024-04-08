@@ -5,6 +5,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import stats.StatsDto;
+import stats.StatsDtoOut;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class BaseClient {
         this.rest = restTemplate;
     }
 
-    private static ResponseEntity<Object> prepareStatsResponse(ResponseEntity<Object> response) {
+    private static ResponseEntity<StatsDtoOut[]> prepareStatsResponse(ResponseEntity<StatsDtoOut[]> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
             return response;
         }
@@ -30,32 +31,32 @@ public class BaseClient {
         return responseBuilder.build();
     }
 
-    protected ResponseEntity<Object> get(String path, Map<String, Object> params) {
+    protected ResponseEntity<StatsDtoOut[]> get(String path, Map<String, Object> params) {
         return makeAndSendRequest(HttpMethod.GET, path, params, null);
     }
 
-    protected ResponseEntity<Object> post(String path, StatsDto body) {
+    protected ResponseEntity<StatsDtoOut[]> post(String path, StatsDto body) {
         return makeAndSendRequest(HttpMethod.POST, path, null, body);
     }
 
-    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method,
-                                                          String path,
-                                                          Map<String, Object> params,
-                                                          @Nullable T body) {
+    private <T> ResponseEntity<StatsDtoOut[]> makeAndSendRequest(HttpMethod method,
+                                                                 String path,
+                                                                 Map<String, Object> params,
+                                                                 @Nullable T body) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<T> requestEntity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<Object> statsServerResponse;
+        ResponseEntity<StatsDtoOut[]> statsServerResponse;
         try {
             if (params != null) {
-                statsServerResponse = rest.exchange(path, method, requestEntity, Object.class, params);
+                statsServerResponse = rest.exchange(path, method, requestEntity, StatsDtoOut[].class, params);
             } else {
-                statsServerResponse = rest.exchange(path, method, requestEntity, Object.class);
+                statsServerResponse = rest.exchange(path, method, requestEntity, StatsDtoOut[].class);
             }
         } catch (HttpStatusCodeException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
+            throw new RuntimeException(e.getMessage());
         }
         return prepareStatsResponse(statsServerResponse);
     }
