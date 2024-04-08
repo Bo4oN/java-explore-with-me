@@ -33,10 +33,9 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public void saveStats(StatsDto statsDto) {
+    public ResponseEntity<StatsDtoOut[]> saveStats(StatsDto statsDto) {
         log.info("Сохранение статистики - {}", statsDto);
-        //return Arrays.asList(Objects.requireNonNull(
-        post("/hit", statsDto);
+        return post("/hit", statsDto);
     }
 
     public List<StatsDtoOut> getStats(LocalDateTime start,
