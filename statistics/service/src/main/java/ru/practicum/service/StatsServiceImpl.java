@@ -27,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsDtoOut> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, boolean isUnique) {
-        if (start.isAfter(end) || start.equals(end)) {
+        if (start.isAfter(end)) {
             throw new IncorrectDataException("Некорректные даты");
         }
         List<StatsDtoOut> statsList = Collections.emptyList();
