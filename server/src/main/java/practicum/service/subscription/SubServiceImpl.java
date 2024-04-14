@@ -6,7 +6,6 @@ import practicum.dto.mappers.user.UserWithEventsMapper;
 import practicum.dto.users.UserDtoWithEvents;
 import practicum.exceptions.BadRequestException;
 import practicum.exceptions.NotFoundException;
-import practicum.model.SubId;
 import practicum.model.Subscriber;
 import practicum.model.User;
 import practicum.repository.EventRepository;
@@ -40,10 +39,10 @@ public class SubServiceImpl implements SubService {
         UserDtoWithEvents subUser = mapper.toDto(sub);
         subUser.setPastEvents(
                 eventRepository.findAllIdByInitiatorIdAndEventDateBefore(subId, LocalDateTime.now())
-                );
+        );
         subUser.setFutureEvents(
                 eventRepository.findAllIdByInitiatorIdAndEventDateAfter(subId, LocalDateTime.now())
-                );
+        );
         return subUser;
     }
 
@@ -61,7 +60,7 @@ public class SubServiceImpl implements SubService {
                 );
                 userWithEvents.setFutureEvents(
                         eventRepository.findAllIdByInitiatorIdAndEventDateAfter(user.getId(), LocalDateTime.now())
-                        );
+                );
                 userList.add(userWithEvents);
             }
         }

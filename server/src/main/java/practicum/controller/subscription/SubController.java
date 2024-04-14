@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import practicum.dto.users.UserDtoWithEvents;
 import practicum.service.subscription.SubServiceImpl;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController

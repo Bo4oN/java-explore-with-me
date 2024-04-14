@@ -1,6 +1,5 @@
 package practicum.service.subscription;
 
-import practicum.dto.mappers.user.UserWithEventsMapper;
 import practicum.dto.users.UserDtoWithEvents;
 
 import java.util.List;
