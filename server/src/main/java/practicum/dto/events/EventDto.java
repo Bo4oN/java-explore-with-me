@@ -35,32 +35,4 @@ public class EventDto {
     private EventState state;
     private long views;
 
-    public EventDto(long id,
-                    String annotation,
-                    CategoryDto categoryDto,
-                    String description,
-                    LocalDateTime eventDate,
-                    LocationDto locationDto,
-                    boolean paid, int participantLimit,
-                    boolean moderation, String title,
-                    int confirm, LocalDateTime createdDate,
-                    UserDtoLight initiator,
-                    LocalDateTime publishedDate,
-                    EventState state) {
-        this.id = id;
-        this.annotation = annotation;
-        this.category = categoryDto;
-        this.description = description;
-        this.eventDate = eventDate;
-        this.location = locationDto;
-        this.paid = paid;
-        this.participantLimit = participantLimit;
-        this.requestModeration = moderation;
-        this.title = title;
-        this.confirmedRequests = confirm;
-        this.createdOn = createdDate;
-        this.initiator = initiator;
-        this.publishedOn = publishedDate;
-        this.state = state;
-    }
 }

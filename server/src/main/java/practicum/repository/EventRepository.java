@@ -65,4 +65,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     boolean existsByCategoryId(Long id);
 
     Page<Event> findAll(Pageable pageable);
+
+    @Query("SELECT e.id FROM Event as e" +
+            " WHERE e.initiator.id = :userId" +
+            " AND (e.eventDate < :dateNow) "
+    )
+    List<Long> findAllIdByInitiatorIdAndEventDateBefore(Long userId, LocalDateTime dateNow);
+
+    @Query("SELECT e.id FROM Event as e" +
+            " WHERE e.initiator.id = :userId" +
+            " AND (e.eventDate > :dateNow) "
+    )
+    List<Long> findAllIdByInitiatorIdAndEventDateAfter(Long userId, LocalDateTime dateNow);
 }

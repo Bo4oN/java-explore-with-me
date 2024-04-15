@@ -1,0 +1,470 @@
+{
+  "info": {
+    "_postman_id": "cc811a17-0810-4d7b-8258-477fc100e04a",
+    "name": "Test Explore with me - subscription",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28247405"
+  },
+  "item": [
+    {
+      "name": "Data preparation",
+      "item": [
+        {
+          "name": "Add user 1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"Mike\",\n    \"email\":\"mike@ya.ru\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add user 2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"Mary\",\n    \"email\":\"mary@ya.ru\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add user 3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"Alex\",\n    \"email\":\"alex@ya.ru\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"table games\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add event 1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"annotation\":\"Первое событие ура-ура\",\n    \"category\":\"1\",\n    \"description\":\"Описание первого вам бы очень понравилось, как же оно красиво описано, какие невообразимо красочные эпитеты использованы.\",\n    \"eventDate\":\"2024-06-02 14:20:00\",\n    \"location\":\n        {\n             \"lat\":\"77.77\",\n             \"lon\":\"99.99\"\n        },\n    \"paid\":\"false\",\n    \"participantLimit\":\"0\",\n    \"requestModeration\":\"false\",\n    \"title\":\"Заголовок первого события\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/users/1/events",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "1",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add event 2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"annotation\":\"Второе событие, а это его аннотация\",\n    \"category\":\"1\",\n    \"description\":\"Описание второго события\",\n    \"eventDate\":\"2024-06-02 14:20:00\",\n    \"location\":\n        {\n             \"lat\":\"777.77\",\n             \"lon\":\"999.99\"\n        },\n    \"paid\":\"false\",\n    \"participantLimit\":\"0\",\n    \"requestModeration\":\"false\",\n    \"title\":\"Заголовок второго события\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/users/3/events",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "3",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Feature tests",
+      "item": [
+        {
+          "name": "Subscribe to yourself",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([400]);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/1/subs/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "1",
+                "subs",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Subscription user 2 to user 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});",
+                  "pm.test(\"Adding a subscription create response\", function () {",
+                  "    pm.response.to.be.withBody;",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "pm.test(\"Test user 'id' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "});",
+                  "pm.test(\"Test user 'name' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('name');",
+                  "});",
+                  "pm.test(\"Test user 'pastEvents' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('pastEvents');",
+                  "    pm.expect(jsonData.pastEvents.length, '\"pastEvents\" must be have 0 eventId').to.eql(0);",
+                  "});",
+                  "pm.test(\"Test user 'futureEvents' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('pastEvents');",
+                  "    pm.expect(jsonData.futureEvents.length, '\"futureEvents\" must be have 1 eventId').to.eql(1);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/2/subs/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "2",
+                "subs",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Subscription user 2 to user 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});",
+                  "pm.test(\"Adding a subscription create response\", function () {",
+                  "    pm.response.to.be.withBody;",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "pm.test(\"Test user 'id' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "});",
+                  "pm.test(\"Test user 'name' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('name');",
+                  "});",
+                  "pm.test(\"Test user 'pastEvents' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('pastEvents');",
+                  "    pm.expect(jsonData.pastEvents.length, '\"pastEvents\" must be have 0 eventId').to.eql(0);",
+                  "});",
+                  "pm.test(\"Test user 'futureEvents' field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('pastEvents');",
+                  "    pm.expect(jsonData.futureEvents.length, '\"futureEvents\" must be have 2 eventId').to.eql(2);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/2/subs/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "2",
+                "subs",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get subscription user 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Get subscription create response\", function () {",
+                  "    pm.response.to.be.withBody;",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "pm.test(\"Test the number of objects in the response\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, '\"Response must be have 2 objects').to.eql(2);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/2/subs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "2",
+                "subs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete subscription user 2 to user 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([204]);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/2/subs/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "2",
+                "subs",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get subscription user 2 after deleting subscription to user 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "     pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Get subscription create response\", function () {",
+                  "    pm.response.to.be.withBody;",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "pm.test(\"Test the number of objects in the response\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, '\"Response must be have 1 objects').to.eql(1);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/2/subs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "2",
+                "subs"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

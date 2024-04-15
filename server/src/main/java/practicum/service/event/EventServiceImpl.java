@@ -1,6 +1,5 @@
 package practicum.service.event;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,6 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
     private final StatsClient statsClient;
-    private final ObjectMapper objectMapper;
     private final EventMapper eventMapper;
     private final EventLightMapper eventLightMapper;
     private final LocationMapper locationMapper;

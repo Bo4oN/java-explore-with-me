@@ -1,6 +1,6 @@
 package ru.practicum.exceptions;
 
-public class IncorrectDataException extends  RuntimeException {
+public class IncorrectDataException extends RuntimeException {
     public IncorrectDataException(String message) {
         super(message);
     }

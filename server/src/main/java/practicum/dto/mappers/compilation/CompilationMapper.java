@@ -10,14 +10,4 @@ import practicum.model.Compilation;
 @Mapper(config = MappingConfig.class,
         uses = EventLightMapper.class)
 public interface CompilationMapper extends BaseMapper<CompilationDto, Compilation> {
-
-    //public static CompilationDto toCompilationDto(Compilation compilation) {
-    //    return new CompilationDto(compilation.getId(),
-    //            compilation.isPinned(),
-    //            compilation.getTitle(),
-    //            compilation.getEvents().stream()
-    //                    .map(EventMapper::toEventDtoLight)
-    //                    .collect(Collectors.toSet())
-    //    );
-    //}
 }

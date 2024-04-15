@@ -30,13 +30,13 @@ public class StatsController {
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
     public List<StatsDtoOut> getStatistics(@RequestParam(value = "start")
-                                                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                           LocalDateTime start,
-                                                           @RequestParam(value = "end")
-                                                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                           LocalDateTime end,
-                                                           @RequestParam(required = false, value = "uris") @Nullable List<String> uris,
-                                                           @RequestParam(value = "unique", defaultValue = "false") boolean isUnique) {
+                                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                           LocalDateTime start,
+                                           @RequestParam(value = "end")
+                                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                           LocalDateTime end,
+                                           @RequestParam(required = false, value = "uris") @Nullable List<String> uris,
+                                           @RequestParam(value = "unique", defaultValue = "false") boolean isUnique) {
         log.info("Get statistics from - {} to - {}, uris list - {}, isUnique - {}.", start, end, uris, isUnique);
         return service.getStatistics(start, end, uris, isUnique);
     }
