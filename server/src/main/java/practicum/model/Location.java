@@ -20,8 +20,4 @@ public class Location {
     @Column(name = "location_lon")
     private float lon;
 
-    public Location(float latitude, float longitude) {
-        this.lat = latitude;
-        this.lon = longitude;
-    }
 }

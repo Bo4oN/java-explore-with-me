@@ -24,17 +24,4 @@ public class EventDtoLight {
     private UserDtoLight initiator;
     private long views;
 
-    public EventDtoLight(Long id, String annotation,
-                         CategoryDto category, LocalDateTime eventDate,
-                         Boolean paid, String title,
-                         int confirm, UserDtoLight initiator) {
-        this.id = id;
-        this.annotation = annotation;
-        this.category = category;
-        this.eventDate = eventDate;
-        this.paid = paid;
-        this.title = title;
-        this.confirmedRequests = confirm;
-        this.initiator = initiator;
-    }
 }
